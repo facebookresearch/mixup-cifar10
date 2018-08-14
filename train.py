@@ -156,8 +156,6 @@ def train(epoch):
         outputs = net(inputs)
         loss = mixup_criterion(criterion, outputs, targets_a, targets_b, lam)
         train_loss += loss.data[0]
-
-        train_loss += loss.data[0]
         _, predicted = torch.max(outputs.data, 1)
         total += targets.size(0)
         correct += (lam * predicted.eq(targets_a.data).cpu().sum()
