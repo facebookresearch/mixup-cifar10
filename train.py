@@ -88,7 +88,7 @@ if args.resume:
     # Load checkpoint.
     print('==> Resuming from checkpoint..')
     assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
-    checkpoint = torch.load('./checkpoint/ckpt.t7' + args.name
+    checkpoint = torch.load('./checkpoint/ckpt.t7' + args.name + '_'
                             + str(args.seed))
     net = checkpoint['net']
     best_acc = checkpoint['acc']
