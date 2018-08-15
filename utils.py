@@ -12,7 +12,6 @@ import torch
 import torch.nn as nn
 import torch.nn.init as init
 
-
 def get_mean_and_std(dataset):
     '''Compute the mean and std value of dataset.'''
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=True, num_workers=2)
@@ -123,3 +122,8 @@ def format_time(seconds):
     if f == '':
         f = '0ms'
     return f
+
+
+def count_parameters(model):
+    ''' Count the parameters of a model '''
+    return sum(p.numel() for p in model.parameters())
