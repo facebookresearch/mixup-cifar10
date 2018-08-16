@@ -74,9 +74,9 @@ class DenseNet(nn.Module):
         
         compression = True if reduction < 1 else False  # Determine if DenseNet-C
         
-        nDenseBlocks = (depth-4) // 3
+        nDenseLayers = (depth-4) // 3
         if bottleneck:
-            nDenseBlocks //= 2
+            nDenseLayers //= 2
             
         nChannels = 2 * growthRate if compression and bottleneck else 16
         
@@ -84,8 +84,8 @@ class DenseNet(nn.Module):
         self.conv1 = nn.Conv2d(3, nChannels, kernel_size=3, padding=1, bias=False)
         
         # Dense Block 1 
-        self.dense1 = self._make_dense(nChannels, growthRate, nDenseBlocks, bottleneck)
-        nChannels += nDenseBlocks*growthRate
+        self.dense1 = self._make_dense(nChannels, growthRate, nDenseLayers, bottleneck)
+        nChannels += nDenseLayers*growthRate
         nOutChannels = int(math.floor(nChannels*reduction))
         
         # Transition Block 1
@@ -93,8 +93,8 @@ class DenseNet(nn.Module):
         nChannels = nOutChannels
         
         # Dense Block 2
-        self.dense2 = self._make_dense(nChannels, growthRate, nDenseBlocks, bottleneck)
-        nChannels += nDenseBlocks*growthRate
+        self.dense2 = self._make_dense(nChannels, growthRate, nDenseLayers, bottleneck)
+        nChannels += nDenseLayers*growthRate
         nOutChannels = int(math.floor(nChannels*reduction))
         
         # Transition Block 2
@@ -102,10 +102,10 @@ class DenseNet(nn.Module):
         nChannels = nOutChannels
         
         # Dense Block 3
-        self.dense3 = self._make_dense(nChannels, growthRate, nDenseBlocks, bottleneck)
+        self.dense3 = self._make_dense(nChannels, growthRate, nDenseLayers, bottleneck)
         
         # Transition Block 3
-        nChannels += nDenseBlocks*growthRate
+        nChannels += nDenseLayers*growthRate
         self.bn1 = nn.BatchNorm2d(nChannels)
         
         # Dense Layer
@@ -123,10 +123,10 @@ class DenseNet(nn.Module):
             elif isinstance(m, nn.Linear):
                 m.bias.data.zero_()
 
-    def _make_dense(self, nChannels, growthRate, nDenseBlocks, bottleneck):
+    def _make_dense(self, nChannels, growthRate, nDenseLayers, bottleneck):
         ''' Function to build a Dense Block '''
         layers = []
-        for i in range(int(nDenseBlocks)):
+        for i in range(int(nDenseLayers)):
             if bottleneck:
                 layers.append(Bottleneck(nChannels, growthRate))
             else:
