@@ -88,7 +88,7 @@ if args.resume:
     # Load checkpoint.
     print('==> Resuming from checkpoint..')
     assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
-    checkpoint = torch.load('./checkpoint/ckpt.t7' + args.name
+    checkpoint = torch.load('./checkpoint/ckpt.t7' + args.name + '_'
                             + str(args.seed))
     net = checkpoint['net']
     best_acc = checkpoint['acc']
@@ -155,8 +155,6 @@ def train(epoch):
                                                       targets_a, targets_b))
         outputs = net(inputs)
         loss = mixup_criterion(criterion, outputs, targets_a, targets_b, lam)
-        train_loss += loss.data[0]
-
         train_loss += loss.data[0]
         _, predicted = torch.max(outputs.data, 1)
         total += targets.size(0)
