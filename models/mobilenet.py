@@ -36,6 +36,8 @@ class MobileNet(nn.Module):
         self.layers = self._make_layers(in_planes=32)
         self.linear = nn.Linear(1024, num_classes)
 
+        self.adapter = nn.Conv2d(32, 64, 1, 1, 0, bias=False)
+
     def _make_layers(self, in_planes):
         layers = []
         for x in self.cfg:
@@ -45,13 +47,20 @@ class MobileNet(nn.Module):
             in_planes = out_planes
         return nn.Sequential(*layers)
 
-    def forward(self, x):
-        out = F.relu(self.bn1(self.conv1(x)))
+    def forward(self, x, manifold_mixup=False, mixup_batches=None, mixup_lambda=None):
+        out_intermediate = self.conv1(x)
+
+        if manifold_mixup:
+            out_intermediate = mixup_lambda * out_intermediate[mixup_batches, ...] + (1-mixup_lambda) * out_intermediate
+
+        out = F.relu(self.bn1(out_intermediate))
         out = self.layers(out)
         out = F.avg_pool2d(out, 2)
         out = out.view(out.size(0), -1)
         out = self.linear(out)
-        return out
+
+        out_intermediate = self.adapter(out_intermediate)
+        return out, out_intermediate
 
 
 def test():

@@ -1,3 +1,22 @@
+# models
+* letnet 264KB
+* ResNet18 43MB
+
+# training
+- [x] resnet18 vanilla: 94% (teacher)
+- [x] resnet18 mixup: 95%
+- [x] lenet vanilla: 66%
+- [x] lenet kd: 75.5%
+- [x] lenet kd + temperature2 (kd_temp2): 75%
+- [x] lenet kd + mixup (alpha=0.2): 76%
+- [x] lenet kd + mixup (alpha=1): 75%
+- [x] lenet kd + mixup (alpha=2): 75%
+- [x] lenet kd + manifold mixup (alpha=0.2): 76%
+- [ ] lenet kd + manifold mixup (alpha=1):
+- [ ] lenet kd + fitnet + manifold mixup
+- [ ] 
+
+
 # Mixup-CIFAR10
 By [Hongyi Zhang](http://web.mit.edu/~hongyiz/www/), [Moustapha Cisse](https://mine.kaust.edu.sa/Pages/cisse.aspx), [Yann Dauphin](http://dauphin.io/), [David Lopez-Paz](https://lopezpaz.org/).
 
