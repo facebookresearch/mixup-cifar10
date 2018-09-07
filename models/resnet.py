@@ -148,15 +148,11 @@ class ResNet(nn.Module):
             self.in_planes = planes * block.expansion
         return nn.Sequential(*layers)
 
-    def forward(self, x, lin=0, lout=5, manifold_mixup=False, mixup_batches=None, mixup_lambda=None):
+    def forward(self, x, lin=0, lout=5):
         out = x
         if lin < 1 and lout > -1:
-            out_intermediate = self.conv1(out)
-
-            if manifold_mixup:
-                out_intermediate = mixup_lambda * out_intermediate[mixup_batches, ...] + (1-mixup_lambda) * out_intermediate
-
-            out = self.bn1(out_intermediate)
+            out = self.conv1(out)
+            out = self.bn1(out)
             out = F.relu(out)
         if lin < 2 and lout > 0:
             out = self.layer1(out)
@@ -170,7 +166,7 @@ class ResNet(nn.Module):
             out = F.avg_pool2d(out, 4)
             out = out.view(out.size(0), -1)
             out = self.linear(out)
-        return out, out_intermediate
+        return out
 
 
 def ResNet18():
