@@ -21,7 +21,7 @@ If you use this method or this code in your paper, then please cite it:
 @article{
 zhang2018mixup,
 title={mixup: Beyond Empirical Risk Minimization},
-author={Hongyi Zhang, Moustapha Cisse, Yann N. Dauphin, David Lopez-Paz},
+author={Hongyi Zhang and Moustapha Cisse and Yann N. Dauphin and David Lopez-Paz},
 journal={International Conference on Learning Representations},
 year={2018},
 url={https://openreview.net/forum?id=r1Ddp1-Rb},
